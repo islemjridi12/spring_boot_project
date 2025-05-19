@@ -1,12 +1,14 @@
 package com.islem.gof.model;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -35,8 +37,8 @@ public class Produit {
     @NotBlank(message = "Le fournisseur est obligatoire")
     private String fournisseur;
 
-    @OneToMany(mappedBy = "produitFinal", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_article", foreignKey = @ForeignKey(name = "fk_article"))
     private List<LigneMatPrem> matieresPremieres;
 
 }

@@ -1,7 +1,6 @@
 package com.islem.gof.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,11 +21,6 @@ public class LigneMatPrem {
 
     private int qte;
 
-    // Le produit utilisé comme matière première
-    @ManyToOne
-    @JoinColumn(name = "produit_final_id")
-    @JsonBackReference // ✅ évite la boucle infinie
-    private Produit produitFinal;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")

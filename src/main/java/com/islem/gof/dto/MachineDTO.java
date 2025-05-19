@@ -2,6 +2,7 @@ package com.islem.gof.dto;
 
 import com.islem.gof.model.EtatMachine;
 import lombok.Data;
+
 import java.time.LocalDate;
 
 @Data

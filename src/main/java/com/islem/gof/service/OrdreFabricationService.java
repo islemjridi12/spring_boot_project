@@ -1,13 +1,13 @@
 package com.islem.gof.service;
 
+import com.islem.gof.Mapper.ObjectMapperUtils;
 import com.islem.gof.dto.OrdreFabricationDTO;
 import com.islem.gof.model.EtatOrdre;
+import com.islem.gof.model.LigneMatPrem;
+import com.islem.gof.model.OrdreFabrication;
 import com.islem.gof.model.Produit;
 import com.islem.gof.repository.OrdreFabricationRepository;
 import com.islem.gof.repository.ProduitRepository;
-import com.islem.gof.Mapper.ObjectMapperUtils;
-import com.islem.gof.model.LigneMatPrem;
-import com.islem.gof.model.OrdreFabrication;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,17 +38,28 @@ public class OrdreFabricationService {
 
         Produit produitFinal = ordre.getProduit();
 
-        if (produitFinal.getMatieresPremieres() != null) {
-            for (LigneMatPrem ligne : produitFinal.getMatieresPremieres()) {
+        List<LigneMatPrem> matieres = produitFinal.getMatieresPremieres();
+
+        // ✅ Si le produit a des matières premières
+        if (matieres != null && !matieres.isEmpty()) {
+            for (LigneMatPrem ligne : matieres) {
                 Produit matiere = ligne.getProduit();
                 int stockActuel = matiere.getStock();
                 int totalARetirer = ligne.getQte() * ordre.getQuantite();
 
                 if (stockActuel < totalARetirer) {
-                    throw new IllegalArgumentException("Stock insuffisant pour : " + matiere.getNom());
+                    throw new IllegalArgumentException(
+                            "Stock insuffisant pour la matière : " + matiere.getNom()
+                                    + " (disponible: " + stockActuel + ", requis: " + totalARetirer + ")"
+                    );
                 }
+            }
 
-                matiere.setStock(stockActuel - totalARetirer);
+            // ✅ Si tout est suffisant, décrémenter les stocks
+            for (LigneMatPrem ligne : matieres) {
+                Produit matiere = ligne.getProduit();
+                int totalARetirer = ligne.getQte() * ordre.getQuantite();
+                matiere.setStock(matiere.getStock() - totalARetirer);
                 produitRepository.save(matiere);
             }
         }
@@ -57,6 +68,7 @@ public class OrdreFabricationService {
         ordreFabricationRepository.save(ordre);
         return ObjectMapperUtils.map(ordre, OrdreFabricationDTO.class);
     }
+
 
     public OrdreFabricationDTO declareProduction(Long id) {
         OrdreFabrication ordre = ordreFabricationRepository.findById(id)

@@ -1,0 +1,16 @@
+<div class="layout-container">
+  <aside class="sidebar">
+    <nav class="nav-menu">
+      <a routerLink="/employes" routerLinkActive="active"><span>👨‍💼</span> Employés</a>
+      <a routerLink="/machines" routerLinkActive="active"><span>🛠</span> Machines</a>
+      <a routerLink="/produits" routerLinkActive="active"><span>📦</span> Produits</a>
+      <a routerLink="/ordre-fabrication" routerLinkActive="active"><span>📝</span> Ordres de Fabrication</a>
+      <a routerLink="/stock" routerLinkActive="active"><span>📊</span> Stock</a>
+    </nav>
+    <button class="logout" (click)="logout()">🔒 Déconnexion</button>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

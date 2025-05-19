@@ -1,0 +1,61 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-success fw-bold">🏭 Gestion des Ordres</h2>
+    <button class="btn btn-outline-success" (click)="toggleForm()">
+      <i class="bi bi-plus-square"></i>
+      {{ showForm ? 'Annuler' : 'Ajouter Ordre' }}
+    </button>
+  </div>
+
+  <app-ordre-fabrication-form
+    *ngIf="showForm"
+    [produitsDisponibles]="produitsDisponibles"
+    (ordreAjoute)="ajouter($event)">
+  </app-ordre-fabrication-form>
+
+  <div *ngIf="!showForm" class="card shadow-sm border-0">
+    <div class="card-header bg-light text-dark">
+      <h5 class="mb-0">🧾 Liste des Ordres</h5>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="bg-light border-bottom">
+        <tr>
+          <th class="text-center">#ID</th>
+          <th>Projet</th>
+          <th>Produit</th>
+          <th>Quantité</th>
+          <th>Date</th>
+          <th>État</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let ordre of ordres">
+          <td class="text-center">{{ ordre.id }}</td>
+          <td>{{ ordre.projet }}</td>
+          <td>{{ ordre.produit.nom }}</td>
+          <td>{{ ordre.quantite }}</td>
+          <td>{{ ordre.date }}</td>
+          <td>
+            <span class="badge bg-secondary" *ngIf="ordre.etat === 'EN_ATTENTE'">En attente</span>
+            <span class="badge bg-warning text-dark" *ngIf="ordre.etat === 'EN_PRODUCTION'">En production</span>
+            <span class="badge bg-success" *ngIf="ordre.etat === 'DECLARE'">Déclaré</span>
+          </td>
+          <td class="text-center">
+            <button *ngIf="ordre.etat === 'EN_ATTENTE'" class="btn btn-sm btn-outline-primary me-1" (click)="lancerProduction(ordre.id!)">
+              <i class="bi bi-play-circle"></i> Lancer
+            </button>
+            <button *ngIf="ordre.etat === 'EN_PRODUCTION'" class="btn btn-sm btn-outline-success me-1" (click)="declarerProduction(ordre.id!)">
+              <i class="bi bi-flag-fill"></i> Déclarer
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="supprimer(ordre.id!)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

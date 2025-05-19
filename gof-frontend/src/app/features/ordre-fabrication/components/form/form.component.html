@@ -1,0 +1,40 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="card shadow-sm border-0 p-4">
+  <div class="mb-3">
+    <label class="form-label">Projet</label>
+    <input type="text" class="form-control" formControlName="projet" />
+    <div *ngIf="form.get('projet')?.touched && form.get('projet')?.invalid" class="text-danger">
+      Le projet est requis.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Produit</label>
+    <select class="form-select" formControlName="produit">
+      <option [ngValue]="null">-- Choisir produit --</option>
+      <option *ngFor="let p of produitsDisponibles" [ngValue]="p">{{ p.nom }}</option>
+    </select>
+    <div *ngIf="form.get('produit')?.touched && form.get('produit')?.invalid" class="text-danger">
+      Le produit est requis.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Quantité</label>
+    <input type="number" class="form-control" formControlName="quantite" />
+    <div *ngIf="form.get('quantite')?.touched && form.get('quantite')?.invalid" class="text-danger">
+      La quantité doit être > 0.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control" formControlName="date" />
+    <div *ngIf="form.get('date')?.touched && form.get('date')?.invalid" class="text-danger">
+      La date est requise.
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="submit" [disabled]="form.invalid">
+    <i class="bi bi-check-circle"></i> {{ ordre ? 'Modifier' : 'Ajouter' }}
+  </button>
+</form>

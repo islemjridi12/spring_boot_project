@@ -1,0 +1,63 @@
+<div class="container mt-5">
+
+  <!-- Titre + bouton -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-success fw-bold">
+      📦 Gestion des Produits
+    </h2>
+    <button class="btn btn-outline-success" (click)="toggleForm()">
+      <i class="bi bi-plus-square"></i>
+      {{ showForm ? 'Annuler' : 'Ajouter Produit' }}
+    </button>
+  </div>
+
+  <!-- ✅ Formulaire affiché -->
+  <div *ngIf="showForm" class="mb-4">
+    <app-produit-form
+      *ngIf="showForm"
+      [produit]="selectedProduit"
+      [produitsDisponibles]="produitsDisponibles"
+      (produitSaved)="onProduitSaved()">
+    </app-produit-form>
+
+  </div>
+
+  <!-- ✅ Liste affichée -->
+  <div *ngIf="!showForm" class="card shadow-sm border-0">
+    <div class="card-header bg-light text-dark">
+      <h5 class="mb-0">🧾 Liste des Produits</h5>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="bg-light border-bottom">
+        <tr>
+          <th class="text-center">#ID</th>
+          <th>Nom</th>
+          <th>Type</th>
+          <th>Stock</th>
+          <th>Fournisseur</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let produit of produits">
+          <td class="text-center">{{ produit.id }}</td>
+          <td>{{ produit.nom }}</td>
+          <td>{{ produit.type }}</td>
+          <td>{{ produit.stock }}</td>
+          <td>{{ produit.fournisseur }}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-outline-secondary me-2" (click)="editProduit(produit)">
+              <i class="bi bi-pencil"></i> Modifier
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteProduit(produit.id!)">
+              <i class="bi bi-trash"></i> Supprimer
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

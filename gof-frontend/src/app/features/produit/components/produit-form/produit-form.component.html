@@ -1,0 +1,63 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="card shadow-sm border-0 p-4">
+  <div class="mb-3">
+    <label class="form-label">Nom du produit</label>
+    <input type="text" class="form-control" formControlName="nom" />
+    <div *ngIf="form.get('nom')?.touched && form.get('nom')?.invalid" class="text-danger">
+      Le nom est requis.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Type</label>
+    <input type="text" class="form-control" formControlName="type" />
+    <div *ngIf="form.get('type')?.touched && form.get('type')?.invalid" class="text-danger">
+      Le type est requis.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Stock</label>
+    <input type="number" class="form-control" formControlName="stock" />
+    <div *ngIf="form.get('stock')?.touched && form.get('stock')?.invalid" class="text-danger">
+      Le stock est requis et doit être ≥ 0.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Fournisseur</label>
+    <input type="text" class="form-control" formControlName="fournisseur" />
+    <div *ngIf="form.get('fournisseur')?.touched && form.get('fournisseur')?.invalid" class="text-danger">
+      Le fournisseur est requis.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Matières premières</label>
+
+    <div *ngFor="let ligne of matieresPremieres; let i = index" class="border rounded p-3 mb-2">
+      <div class="row g-2">
+        <div class="col-md-8">
+          <select class="form-select" [(ngModel)]="ligne.produit" [ngModelOptions]="{ standalone: true }">
+            <option *ngFor="let p of produitsDisponibles" [ngValue]="p">{{ p.nom }}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <input type="number" class="form-control" [(ngModel)]="ligne.qte" [ngModelOptions]="{ standalone: true }" placeholder="Quantité" />
+        </div>
+        <div class="col-md-1 d-flex align-items-center">
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeLigne(i)">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-outline-primary btn-sm" (click)="addLigne()">
+      <i class="bi bi-plus-circle"></i> Ajouter matière première
+    </button>
+  </div>
+
+  <button class="btn btn-success mt-3" type="submit" [disabled]="form.invalid">
+    <i class="bi bi-check-circle"></i> {{ produit ? 'Modifier' : 'Ajouter' }}
+  </button>
+</form>

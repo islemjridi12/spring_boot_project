@@ -1,0 +1,40 @@
+<div class="card mb-4">
+  <div class="card-header bg-light text-black">
+    {{ employe?.id ? 'Modifier un Employé' : 'Ajouter un Employé' }}
+  </div>
+
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label class="form-label">Nom</label>
+        <input type="text" class="form-control" formControlName="nom" placeholder="Nom de l'employé" />
+        <div *ngIf="form.get('nom')?.touched && form.get('nom')?.invalid" class="text-danger">
+          Le nom est requis.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Poste</label>
+        <input type="text" class="form-control" formControlName="poste" placeholder="Poste de l'employé" />
+        <div *ngIf="form.get('poste')?.touched && form.get('poste')?.invalid" class="text-danger">
+          Le poste est requis.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Machine Assignée (facultatif)</label>
+        <select class="form-select" formControlName="machineAssigneeId">
+          <option [ngValue]="null">-- Aucune --</option>
+          <option *ngFor="let machine of machinesDisponibles" [value]="machine.id">
+            {{ machine.nom }} ({{ machine.etat }})
+          </option>
+        </select>
+      </div>
+
+      <button class="btn btn-success" [disabled]="form.invalid">
+        <i class="bi" [ngClass]="employe ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+        {{ employe ? 'Modifier' : 'Ajouter' }}
+      </button>
+    </form>
+  </div>
+</div>

@@ -90,21 +90,7 @@ Ce système permet à une entreprise de :
 - Docker Compose
 - Git
 
-### 📁 Structure du projet
 
-\`\`\`
-projet-gof/
-│
-├── backend/         # Application Spring Boot
-│   └── Dockerfile
-│
-├── frontend/        # Application Angular
-│   └── Dockerfile
-│
-└── docker-compose.yml
-\`\`\`
-
----
 
 ### ▶️ Lancer l'application avec Docker
 
@@ -128,81 +114,10 @@ docker-compose up --build
 
 ---
 
-## 🐳 Dockerfiles
-
-### ✅ backend/Dockerfile
-
-\`\`\`dockerfile
-FROM openjdk:17
-WORKDIR /app
-COPY target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
-\`\`\`
-
-### ✅ frontend/Dockerfile
-
-\`\`\`dockerfile
-FROM node:18 as build
-WORKDIR /app
-COPY . .
-RUN npm install
-RUN npm run build --prod
-
-FROM nginx:alpine
-COPY --from=build /app/dist/<nom-app> /usr/share/nginx/html
-EXPOSE 80
-\`\`\`
-
-> Remplace `<nom-app>` par le nom réel de ton dossier Angular généré.
-
----
-
-### ✅ docker-compose.yml
-
-\`\`\`yaml
-version: '3.8'
-
-services:
-  backend:
-    build: ./backend
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/gof
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-    depends_on:
-      - db
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "4200:80"
-    depends_on:
-      - backend
-
-  db:
-    image: postgres:15
-    restart: always
-    environment:
-      POSTGRES_DB: gof
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
-volumes:
-  pgdata:
-\`\`\`
-
----
 
 ## 👨‍💻 Auteurs
 
-- **Nom** : [Ton nom]
+- **Nom** : [islem jridi]
 - **Projet universitaire** : Sujet 10 – Système de gestion des ordres de fabrication
 - **Année** : 2025
 

@@ -3,21 +3,22 @@ import { CommonModule } from '@angular/common';
 import { ProduitService } from '../../services/produit.service';
 import { Produit } from '../../../../shared/models/produit.model';
 import { ProduitFormComponent } from '../produit-form/produit-form.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-produit-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    ProduitFormComponent
-  ],
+  imports: [CommonModule, FormsModule, ProduitFormComponent],
   templateUrl: './produit-list.component.html',
 })
 export class ProduitListComponent implements OnInit {
   produits: Produit[] = [];
+  filteredProduits: Produit[] = [];
   produitsDisponibles: Produit[] = [];
+
   selectedProduit: Produit | null = null;
   showForm = false;
+  searchText: string = '';
 
   constructor(private produitService: ProduitService) {}
 
@@ -28,8 +29,18 @@ export class ProduitListComponent implements OnInit {
   loadProduits(): void {
     this.produitService.getAll().subscribe(data => {
       this.produits = data;
-      this.produitsDisponibles = data; // on remplit aussi la liste disponible
+      this.produitsDisponibles = data;
+      this.filterProduits();
     });
+  }
+
+  filterProduits(): void {
+    const term = this.searchText.toLowerCase();
+    this.filteredProduits = this.produits.filter(p =>
+      p.nom.toLowerCase().includes(term) ||
+      p.type.toLowerCase().includes(term) ||
+      p.fournisseur.toLowerCase().includes(term)
+    );
   }
 
   addProduit(): void {
@@ -38,7 +49,7 @@ export class ProduitListComponent implements OnInit {
   }
 
   editProduit(produit: Produit): void {
-    this.selectedProduit = null; // permet de forcer le reset du form
+    this.selectedProduit = null;
     setTimeout(() => {
       this.selectedProduit = produit;
       this.showForm = true;
@@ -46,7 +57,9 @@ export class ProduitListComponent implements OnInit {
   }
 
   deleteProduit(id: number): void {
-    this.produitService.delete(id).subscribe(() => this.loadProduits());
+    if (confirm("Confirmer la suppression ?")) {
+      this.produitService.delete(id).subscribe(() => this.loadProduits());
+    }
   }
 
   toggleForm(): void {

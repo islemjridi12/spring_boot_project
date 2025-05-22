@@ -1,0 +1,25 @@
+.pastel-blue {
+  background-color: #d0e7ff;
+}
+
+.pastel-green {
+  background-color: #d4edda;
+}
+
+.pastel-yellow {
+  background-color: #fff3cd;
+}
+
+.pastel-cyan {
+  background-color: #d1f3f9;
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}

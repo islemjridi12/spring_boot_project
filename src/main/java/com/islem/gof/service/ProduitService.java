@@ -47,7 +47,7 @@ public class ProduitService {
             List<LigneMatPrem> nouvelles = dto.getMatieresPremieres().stream()
                     .map(l -> {
                         LigneMatPrem ligne = ObjectMapperUtils.map(l, LigneMatPrem.class);
-                        ligne.setProduit(existing); // très important pour la cohérence JPA
+                        ligne.setProduit(ligne.getProduit()); // très important pour la cohérence JPA
                         return ligne;
                     })
                     .collect(Collectors.toList());

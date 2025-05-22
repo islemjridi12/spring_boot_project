@@ -1,0 +1,20 @@
+<div class="container mt-5">
+  <h2 class="fw-bold text-primary mb-4">📊 Tableau de bord</h2>
+
+  <div class="row g-4">
+    <div class="col-md-3" *ngFor="let item of [
+  { label: 'Machines', total: totalMachines, color: '#e4af76' },
+  { label: 'Employés', total: totalEmployes, color: '#e3a4c8' },
+  { label: 'Produits', total: totalProduits, color: 'rgba(150,216,196,0.78)' },
+  { label: 'Ordres', total: totalOrdres, color: '#c1a8d3' }
+]">
+      <div class="card text-center shadow-sm" [ngStyle]="{ 'background-color': item.color }">
+        <div class="card-body">
+          <h5 class="card-title text-dark">{{ item.label }}</h5>
+          <p class="fs-3 fw-bold text-dark">{{ item.total }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

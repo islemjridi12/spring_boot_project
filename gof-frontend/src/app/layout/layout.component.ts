@@ -1,16 +1,21 @@
-import { Component } from '@angular/core';
-import {RouterModule} from "@angular/router";
+import { Component, inject } from '@angular/core';
+import { RouterModule, Router } from "@angular/router";
+import {AuthService} from "../core/services/auth.service";
+ // adapte le chemin si besoin
 
 @Component({
   selector: 'app-layout',
   standalone: true,
   imports: [RouterModule],
-  templateUrl: './layout.component.html',    // ✅ remet templateUrl ici
-  styleUrls: ['./layout.component.css']      // ✅ styleUrls au pluriel et tableau
+  templateUrl: './layout.component.html',
+  styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent {
+  private auth = inject(AuthService);
+  private router = inject(Router);
+
   logout() {
-    console.log("Déconnexion"); // Ajoute ici la vraie logique si besoin
+    this.auth.logout();               // vide le localStorage
+    this.router.navigate(['/login']); // redirige vers la page de login
   }
 }
-

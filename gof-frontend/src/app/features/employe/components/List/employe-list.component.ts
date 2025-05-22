@@ -1,22 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // pour ngModel
 
 import { Employe } from '../../../../shared/models/employe.model';
 import { EmployeService } from '../../services/employe.service';
-import { EmployeFormComponent } from "../form/employe-form.component";
+import { EmployeFormComponent } from '../form/employe-form.component';
 
 @Component({
   selector: 'app-employe-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, EmployeFormComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, EmployeFormComponent],
   templateUrl: './employe-list.component.html',
-  styleUrls: ['./employe-list.component.css']
+  styleUrls: ['./employe-list.component.css'],
 })
 export class EmployeListComponent implements OnInit {
   employes: Employe[] = [];
+  filteredEmployes: Employe[] = [];
   showForm = false;
   selectedEmploye: Employe | null = null;
+  searchText = '';
 
   constructor(private employeService: EmployeService) {}
 
@@ -26,8 +29,11 @@ export class EmployeListComponent implements OnInit {
 
   loadEmployes(): void {
     this.employeService.getAll().subscribe({
-      next: (data) => this.employes = data,
-      error: (err) => console.error('Erreur chargement employés :', err)
+      next: (data) => {
+        this.employes = data;
+        this.filteredEmployes = data;
+      },
+      error: (err) => console.error('Erreur chargement employés :', err),
     });
   }
 
@@ -36,7 +42,7 @@ export class EmployeListComponent implements OnInit {
     this.showForm = !this.showForm;
   }
 
-  editEmploye(emp: Employe) {
+  editEmploye(emp: Employe): void {
     this.selectedEmploye = { ...emp };
     this.showForm = true;
   }
@@ -50,7 +56,15 @@ export class EmployeListComponent implements OnInit {
   deleteEmploye(id: number): void {
     this.employeService.delete(id).subscribe({
       next: () => this.loadEmployes(),
-      error: (err) => console.error('Erreur suppression employé :', err)
+      error: (err) => console.error('Erreur suppression employé :', err),
     });
+  }
+
+  filterEmployes(): void {
+    const term = this.searchText.toLowerCase();
+    this.filteredEmployes = this.employes.filter(emp =>
+      emp.nom.toLowerCase().includes(term) ||
+      emp.poste.toLowerCase().includes(term)
+    );
   }
 }

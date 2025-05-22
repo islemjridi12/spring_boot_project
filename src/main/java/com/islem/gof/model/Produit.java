@@ -38,7 +38,7 @@ public class Produit {
     private String fournisseur;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_article", foreignKey = @ForeignKey(name = "fk_article"))
+    @JoinColumn(name = "fk_produit", foreignKey = @ForeignKey(name = "fk_produit"))
     private List<LigneMatPrem> matieresPremieres;
 
 }

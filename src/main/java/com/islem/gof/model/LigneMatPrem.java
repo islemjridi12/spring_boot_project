@@ -3,6 +3,7 @@ package com.islem.gof.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,9 +23,8 @@ public class LigneMatPrem {
     private int qte;
 
 
-    @ManyToOne
-    @JoinColumn(name = "produit_id")
-    @JsonIgnore // ✅ évite la récursion par l'autre produit
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    @JoinColumn(name = "fk_produit_composant", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_produit_composant"))
     private Produit produit;
 
 
